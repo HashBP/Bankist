@@ -1,3 +1,8 @@
+/*
+ * Use this CSS to learn some intersting techniques,
+ * in case you're wondering how I built the UI.
+ * Have fun! 😁
+ */
 
 * {
   margin: 0;
@@ -88,6 +93,7 @@ nav {
   grid-template-rows: auto repeat(3, 15rem) auto;
   gap: 2rem;
 
+  /* NOTE This creates the fade in/out anumation */
   opacity: 0;
   transition: all 1s;
 }
@@ -115,6 +121,8 @@ nav {
   font-size: 4.5rem;
   font-weight: 400;
 }
+
+/* MOVEMENTS */
 .movements {
   grid-row: 2 / span 3;
   background-color: #fff;
@@ -159,6 +167,7 @@ nav {
   margin-left: auto;
 }
 
+/* SUMMARY */
 .summary {
   grid-row: 5 / 6;
   display: flex;
@@ -197,6 +206,7 @@ nav {
   cursor: pointer;
 }
 
+/* OPERATIONS */
 .operation {
   border-radius: 1rem;
   padding: 3rem 4rem;
@@ -229,12 +239,14 @@ h2 {
   gap: 0.4rem 1rem;
 }
 
+/* Exceptions for interst */
 .form.form--loan {
   grid-template-columns: 2.5fr 1fr 2.5fr;
 }
 .form__label--loan {
   grid-row: 2;
 }
+/* End exceptions */
 
 .form__input {
   width: 100%;
@@ -282,4 +294,34 @@ h2 {
 
 .timer {
   font-weight: 600;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  background-color: #39b385;
+  border-radius: 100px;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  margin-right: 1rem;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }

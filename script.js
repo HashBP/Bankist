@@ -30,7 +30,7 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
-/////////////////////////////////////////////////
+// Elements
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
 const labelBalance = document.querySelector('.balance__value');
@@ -57,6 +57,7 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
+// Functions
 
 const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
@@ -118,32 +119,42 @@ const createUsernames = function (accs) {
 createUsernames(accounts);
 
 const updateUI = function (acc) {
+  // Display movements
   displayMovements(acc.movements);
 
+  // Display balance
   calcDisplayBalance(acc);
 
+  // Display summary
   calcDisplaySummary(acc);
 };
 
 ///////////////////////////////////////
+// Event handlers
 let currentAccount;
 
 btnLogin.addEventListener('click', function (e) {
+  // Prevent form from submitting
   e.preventDefault();
 
+  console.log(accounts);
   currentAccount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
   console.log(currentAccount);
 
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // Display UI and message
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
     }`;
     containerApp.style.opacity = 100;
+
+    // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
+    // Update UI
     updateUI(currentAccount);
   }
 });
@@ -162,9 +173,11 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.balance >= amount &&
     receiverAcc?.username !== currentAccount.username
   ) {
+    // Doing the transfer
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
 
+    // Update UI
     updateUI(currentAccount);
   }
 });
@@ -175,7 +188,10 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Number(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    // Add movement
     currentAccount.movements.push(amount);
+
+    // Update UI
     updateUI(currentAccount);
   }
   inputLoanAmount.value = '';
@@ -192,9 +208,12 @@ btnClose.addEventListener('click', function (e) {
       acc => acc.username === currentAccount.username
     );
     console.log(index);
+    // .indexOf(23)
 
+    // Delete account
     accounts.splice(index, 1);
 
+    // Hide UI
     containerApp.style.opacity = 0;
   }
 
@@ -210,9 +229,76 @@ btnSort.addEventListener('click', function (e) {
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
+// LECTURES
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
+///////////////////////////////////////
+// The map Method
+const eurToUsd = 1.1;
+
+// const movementsUSD = movements.map(function (mov) {
+//   return mov * eurToUsd;
+// });
+
+const movementsUSD = movements.map(mov => mov * eurToUsd);
+
+console.log(movements);
+console.log(movementsUSD);
+
+const movementsUSDfor = [];
+for (const mov of movements) movementsUSDfor.push(mov * eurToUsd);
+console.log(movementsUSDfor);
+
+const movementsDescriptions = movements.map(
+  (mov, i) =>
+    `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${Math.abs(
+      mov
+    )}`
+);
+console.log(movementsDescriptions);
+
+///////////////////////////////////////
+// The filter Method
+const deposit = movements.filter(function (mov, i, arr) {
+  return mov > 0;
+});
+console.log(movements);
+console.log(deposits);
+
+const depositsFor = [];
+for (const mov of movements) if (mov > 0) depositsFor.push(mov);
+console.log(depositsFor);
+
+const withdrawal = movements.filter(mov => mov < 0);
+console.log(withdrawals);
+
+///////////////////////////////////////
+// The reduce Method
+console.log(movements);
+
+// accumulator -> SNOWBALL
+// const balance = movements.reduce(function (acc, cur, i, arr) {
+//   console.log(`Iteration ${i}: ${acc}`);
+//   return acc + cur;
+// }, 0);
+const balance = movements.reduce((acc, cur) => acc + cur, 0);
+console.log(balance);
+
+let balance2 = 0;
+for (const mov of movements) balance2 += mov;
+console.log(balance2);
+
+// Maximum value
+const max = movements.reduce((acc, mov) => {
+  if (acc > mov) return acc;
+  else return mov;
+}, movements[0]);
+console.log(max);
+///////////////////////////////////////
+// Array Methods Practice
+
+// 1.
 const bankDepositSum = accounts
   .flatMap(acc => acc.movements)
   .filter(mov => mov > 0)
@@ -220,12 +306,18 @@ const bankDepositSum = accounts
 
 console.log(bankDepositSum);
 
+// 2.
+// const numDeposits1000 = accounts
+//   .flatMap(acc => acc.movements)
+//   .filter(mov => mov >= 1000).length;
+
 const numDeposits1000 = accounts
   .flatMap(acc => acc.movements)
   .reduce((count, cur) => (cur >= 1000 ? ++count : count), 0);
 
 console.log(numDeposits1000);
 
+// Prefixed ++ oeprator
 let a = 10;
 console.log(++a);
 console.log(a);
@@ -244,6 +336,8 @@ const { deposits, withdrawals } = accounts
 
 console.log(deposits, withdrawals);
 
+// 4.
+// this is a nice title -> This Is a Nice Title
 const convertTitleCase = function (title) {
   const capitzalize = str => str[0].toUpperCase() + str.slice(1);
 
@@ -261,4 +355,3 @@ const convertTitleCase = function (title) {
 console.log(convertTitleCase('this is a nice title'));
 console.log(convertTitleCase('this is a LONG title but not too long'));
 console.log(convertTitleCase('and here is another title with an EXAMPLE'));
-
